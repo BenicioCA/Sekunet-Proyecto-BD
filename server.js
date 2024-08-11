@@ -8,7 +8,7 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'));
 
 app.get('/', (req, res) => {
-    console.log('Here')
+    console.log('Updated')
     res.render('index')
 });
  
