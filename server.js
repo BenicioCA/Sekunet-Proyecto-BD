@@ -24,6 +24,10 @@ app.get('/productos-domotica', (req, res) => {
     res.render('productos-domotica');
 });
 
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 })
