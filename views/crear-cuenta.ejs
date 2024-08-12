@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio Sesión Sekunet</title>
+    <title>Crear Cuenta Sekunet</title>
     <style>
         body {
             background-color: whitesmoke;
@@ -34,12 +34,6 @@
             object-fit: contain;
         }
 
-        .navbar .nav-container {
-            display: flex;
-            flex: 1;
-            justify-content: center;
-        }
-
         .navbar .nav-links {
             display: flex;
             gap: 30px;
@@ -53,20 +47,7 @@
             line-height: 50px;
         }
 
-        .navbar .nav-links a:hover{
-            color: #007bff;
-        }
-
-        .navbar .login-link {
-            margin-top: 20px;
-            text-decoration: none;
-            color: black;
-            font-size: 18px;
-            font-weight: bold;
-            line-height: 50px;
-        }
-
-        .navbar .login-link:hover {
+        .navbar .nav-links a:hover {
             color: #007bff;
         }
 
@@ -74,7 +55,7 @@
             background-color: white;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0  10px rgba (0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
             margin-top: 100px;
             margin-left: auto;
@@ -89,8 +70,9 @@
             color: #333;
         }
 
+        .login-container input[type="text"],
         .login-container input[type="email"],
-        .login-container input[type="password"]{
+        .login-container input[type="password"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -116,38 +98,6 @@
             background-color: #0056b3;
         }
 
-        .extra-buttons {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .extra-buttons a {
-            width: 48%;
-            padding: 10px;
-            background-color: #00bfff;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            display: inline-block;
-        }
-
-        .extra-buttons a:hover {
-            background-color: #009acd;
-        }
-
-        .extra-buttons .recover-password {
-            background-color: #ffa500;
-            text-align: center;
-        }
-
-        .extra-buttons .recover-password:hover {
-            background-color: #e69500;
-        }
-
         .footer {
             background-color: blue;
             color: white;
@@ -163,20 +113,17 @@
     <div class="navbar">
         <img src="https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/dtbujoqmk9arq03eipw9" alt="Sekunet Logo">
         <div class="nav-links">
-            <a href="/">Volver atrás</a>
+            <a href="/login">Volver Atrás</a>
         </div>
     </div>
     <div class="login-container">
-        <h2>Iniciar Sesión</h2>
-        <form action="/login" method="POST">
+        <h2>Crear Cuenta</h2>
+        <form action="/crear-cuienta" method="POST">
+            <input type="text" name="username" placeholder="Nonbre de Usuario" required>
             <input type="email" name="email" placeholder="Correo Electrónico" required>
             <input type="password" name="password" placeholder="Contraseña" required>
-            <button type="submit">Inciar Sesión</button>
+            <button type="submit">Crear Cuenta</button>
         </form>
-        <div class="extra-buttons">
-            <a href="/crear-cuenta" class="create-account">Crear mi cuenta</a>
-            <a href="#" class="recover-password">Recuperar Contraseña</a>
-        </div>
     </div>
 
     <div class="footer">
