@@ -32,6 +32,10 @@ app.get('/crear-cuenta', (req, res) => {
     res.render('crear-cuenta');
 });
 
+app.get('/recuperar-password', (req, res) => {
+    res.render('recuperar-password');
+});
+
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 })
