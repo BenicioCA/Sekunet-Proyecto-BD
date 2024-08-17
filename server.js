@@ -1,8 +1,11 @@
 const express = require('express');
 const path = require('path');
+
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'styles')));
+app.use(express.urlencoded({ extended: true }));
+
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'));
@@ -31,6 +34,7 @@ app.get('/login', (req, res) => {
 app.get('/crear-cuenta', (req, res) => {
     res.render('crear-cuenta');
 });
+
 
 app.get('/recuperar-password', (req, res) => {
     res.render('recuperar-password');
