@@ -40,6 +40,10 @@ app.get('/perfil', (req, res) => {
     res.render('perfil');
 })
 
+app.get('/metodo-pago', (req, res) => {
+    res.render('metodo-pago');
+});
+
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 })
