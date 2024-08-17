@@ -144,6 +144,21 @@
             transform: translateX(26px);
         }
 
+        .payment-link {
+            margin-top: 10px;
+            display: block;
+            text-align: left;
+        }
+
+        .payment-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .payment-link a:hover {
+            text-decoration: underline;
+        }
+
         .footer {
             background-color: blue;
             color: white;
@@ -183,6 +198,13 @@
         <div class="profile-info">
             <label>Rol:</label>
             <p><!-- Aqui ira el tipo de rol --></p>
+        </div>
+        <div class="profile-info">
+            <label>Tarjeta Actual:</label>
+            <p><!-- Aqui ira la tarjeta actual --></p>
+        </div>
+        <div class="payment-link">
+            <a href="/metodo-pago">Actualizar Método de Pago</a>
         </div>
         <div class="switch-container">
             <label>Notificaciones:</label>
