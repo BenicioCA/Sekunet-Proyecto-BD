@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sekunet- Distribuidor mayorista</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=sawp">
+    <title>Nuestras Sucursales Sekunet</title>
     <style>
         body {
             background-color: whitesmoke;
             margin: 0;
             font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
-    
+
         .navbar {
             background-color: white;
             padding: 15px;
@@ -27,16 +29,9 @@
         }
 
         .navbar img {
-            height: 100%;
             max-height: 50px;
             margin-right: 20px;
             object-fit: contain;
-        }
-
-        .navbar .nav-container {
-            display: flex;
-            flex: 1;
-            justify-content: center;
         }
 
         .navbar .nav-links {
@@ -52,20 +47,7 @@
             line-height: 50px;
         }
 
-        .navbar .nav-links a:hover{
-            color: #007bff;
-        }
-
-        .navbar .login-link {
-            margin-left: 20px;
-            text-decoration: none;
-            color: black;
-            font-size: 18px;
-            font-weight: bold;
-            line-height: 50px;
-        }
-
-        .navbar .login-link:hover {
+        .navbar .nav-links a:hover {
             color: #007bff;
         }
 
@@ -83,15 +65,9 @@
 <body>
     <div class="navbar">
         <img src="https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/dtbujoqmk9arq03eipw9" alt="Sekunet Logo">
-            <div class="nav-container">
-                    <div class="nav-links">
-                    <a href="/routers">Routers</a>
-                    <a href="/switches">Switches</a>
-                    <a href="/productos-domotica">Productos Domótica</a>
-                    <a href="/sucursales">Nuestras Sucursales</a>
-                </div>
-            </div>
-            <a href="/login" class="login-link">Iniciar Sesión</a>
+        <div class="nav-links">
+            <a href="/">Volver Atrás</a>
+        </div>
     </div>
 
     <div class="footer">
