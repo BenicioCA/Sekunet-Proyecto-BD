@@ -64,6 +64,33 @@ app.get('/login', (req, res) => {
     res.render('login');
 });
 
+//Ruta para manejar el inicio de sesion
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const connection = req.db;
+
+        //Verificar si el usuario existe y si las credenciales son correctas
+        const result = await connection.execute(
+            'SELECT * FROM fide_usuarios_tb WHERE usuario_email = :email AND usuario_contrasena = :password',
+            [email, password]
+        );
+
+        if (result.rows.length > 0){
+            //Credenciales correctas, ridirigir a index.ejs
+            res.redirect('/');
+        } else {
+            //Credenciales incorrectas, redirigir a login.ejs
+            res.redirect('/login');
+        }
+
+    } catch (err) {
+        console.log('Error al iniciar sesión:', err);
+        res.status(500).send('Error al iniciar sesion');
+    }
+});
+
 app.get('/crear-cuenta', (req, res) => {
     res.render('crear-cuenta');
 });
