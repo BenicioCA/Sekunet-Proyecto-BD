@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const oracledb = require('oracledb');
+const session = require('express-session');
 
 const app = express();
 
@@ -10,6 +11,17 @@ const dbConfig = {
     password: '12345',
     connectString: 'localhost:1521/orcl'
 };
+
+//Configuracion de la sesion
+const crypto = require('crypto');
+const secret = crypto.randomBytes(32).toString('hex');
+
+app.use(session({
+    secret: secret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false}
+}));
 
 //Funcion para obtener una conexion de base de datos
 async function getConnection() {
@@ -34,6 +46,12 @@ app.use(async (req, res, next) => {
     }
 });
 
+//Middleware para manejar el estado de autentificacion
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isAuthenticated || false;
+    next();
+});
+
 app.use(express.static(path.join(__dirname, 'styles')));
 app.use(express.urlencoded({ extended: true }));
 
@@ -43,23 +61,6 @@ app.set('views', path.join(__dirname, 'views'));
 
 
 //Rutas
-app.get('/', (req, res) => {
-    console.log('Updated')
-    res.render('index')
-});
-
-app.get('/routers', (req, res) => {
-    res.render('routers');
-});
-
-app.get('/switches', (req, res) => {
-    res.render('switches');
-});
-
-app.get('/productos-domotica', (req, res) => {
-    res.render('productos-domotica');
-});
-
 app.get('/login', (req, res) => {
     res.render('login');
 });
@@ -79,6 +80,8 @@ app.post('/login', async (req, res) => {
 
         if (result.rows.length > 0){
             //Credenciales correctas, ridirigir a index.ejs
+            req.session.isAuthenticated = true;
+            req.session.userEmail = email;
             res.redirect('/');
         } else {
             //Credenciales incorrectas, redirigir a login.ejs
@@ -89,6 +92,15 @@ app.post('/login', async (req, res) => {
         console.log('Error al iniciar sesión:', err);
         res.status(500).send('Error al iniciar sesion');
     }
+});
+
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.log('Error al cerrar sesión:', err);
+        }
+        res.redirect('/');
+    });
 });
 
 app.get('/crear-cuenta', (req, res) => {
@@ -124,13 +136,67 @@ app.post('/crear-cuenta', async (req, res) => {
     }
 });
 
+app.get('/', (req, res) => {
+    console.log('Updated')
+    res.render('index')
+});
+
+app.get('/routers', (req, res) => {
+    res.render('routers');
+});
+
+app.get('/switches', (req, res) => {
+    res.render('switches');
+});
+
+app.get('/productos-domotica', (req, res) => {
+    res.render('productos-domotica');
+});
+
 app.get('/recuperar-password', (req, res) => {
     res.render('recuperar-password');
 });
 
-app.get('/perfil', (req, res) => {
-    res.render('perfil');
-})
+app.get('/perfil', async (req, res) => {
+    if (!req.session.isAuthenticated) {
+        return res.redirect('/login');
+    }
+
+    try {
+        const connection = req.db;
+        const email = req.session.userEmail;
+
+        //Consultar la informacion del usuario desde la base de datos
+        const result = await connection.execute(
+            'SELECT usuario_nombre, usuario_email, usuario_contrasena, usuario_fecha_registro, rol_id FROM fide_usuarios_tb WHERE usuario_email = :email',
+            [email]
+        );
+
+        const user = result.rows[0];
+        if (!user){
+            return res.status(404).send('Usuario no encontrado');
+        }
+
+        //Obtener el nombre del rol
+        const roleResult = await connection.execute(
+            'SELECT rol_nombre FROM fide_roles_tb WHERE rol_id = :rol_id',
+            [user[4]]
+        );
+
+        const role = roleResult.rows[0][0];
+
+        res.render('perfil', {
+            nombre: user[0],
+            email: user[1],
+            contrasena: user[2],
+            fechaRegistro: user[3],
+            rol: role
+        });
+    } catch (err) {
+        console.error('Error al obtener el perfil:', err);
+        res.status(500).send('Error al obtener el perfil');
+    }
+});
 
 app.get('/metodo-pago', (req, res) => {
     res.render('metodo-pago');

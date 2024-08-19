@@ -91,7 +91,11 @@
                     <a href="/sucursales">Nuestras Sucursales</a>
                 </div>
             </div>
-            <a href="/login" class="login-link">Iniciar Sesión</a>
+            <% if (isAuthenticated) { %>
+                <a href="/perfil" class="login-link">Perfil</a>
+            <% } else { %>
+                <a href="/login" class="login-link">Iniciar Sesion</a>
+            <% } %>
     </div>
 
     <div class="footer">
