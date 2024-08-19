@@ -167,18 +167,18 @@ app.get('/perfil', async (req, res) => {
         const connection = req.db;
         const email = req.session.userEmail;
 
-        //Consultar la informacion del usuario desde la base de datos
-        const result = await connection.execute(
+        // Consultar la información del usuario desde la base de datos
+        const userResult = await connection.execute(
             'SELECT usuario_nombre, usuario_email, usuario_contrasena, usuario_fecha_registro, rol_id FROM fide_usuarios_tb WHERE usuario_email = :email',
             [email]
         );
 
-        const user = result.rows[0];
+        const user = userResult.rows[0];
         if (!user){
             return res.status(404).send('Usuario no encontrado');
         }
 
-        //Obtener el nombre del rol
+        // Obtener el nombre del rol
         const roleResult = await connection.execute(
             'SELECT rol_nombre FROM fide_roles_tb WHERE rol_id = :rol_id',
             [user[4]]
@@ -186,12 +186,22 @@ app.get('/perfil', async (req, res) => {
 
         const role = roleResult.rows[0][0];
 
+        // Consultar el número de tarjeta del usuario
+        const cardResult = await connection.execute(
+            'SELECT metodo_tipo, estado, fecha_expiracion FROM fide_metodos_pago_tb WHERE usuario_id = :userId ORDER BY metodo_pago_id DESC FETCH FIRST 1 ROW ONLY',
+            [user[4]] // Usar el ID de usuario obtenido en la consulta previa
+        );
+
+        const card = cardResult.rows[0];
+        const cardInfo = card ? `${card[0]} - ${card[2]} - ${card[1]}` : 'No se encontró información de tarjeta';
+
         res.render('perfil', {
             nombre: user[0],
             email: user[1],
             contrasena: user[2],
             fechaRegistro: user[3],
-            rol: role
+            rol: role,
+            tarjeta: cardInfo
         });
     } catch (err) {
         console.error('Error al obtener el perfil:', err);
