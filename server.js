@@ -68,6 +68,35 @@ app.get('/crear-cuenta', (req, res) => {
     res.render('crear-cuenta');
 });
 
+//Ruta para manejar la creacion de una cuenta
+app.post('/crear-cuenta', async (req, res) => {
+    const { username, apellido, email, password } = req.body;
+
+    try {
+        const connection = req.db;
+
+        //Determina el rol en base al handle del correo
+        let rol_id = 2; //ID para cliente
+        if (email.includes('@sekunet')){
+            rol_id = 1; //ID para admin
+        }
+
+        //Inserta los datos en la tabla fide_usuarios_tb
+        const result = await connection.execute(
+            `INSERT INTO fide_usuarios_tb (usuario_id, usuario_nombre, usuario_apellido, usuario_email, usuario_contrasena, rol_id)
+            VALUES (fide_usuarios_seq.NEXTVAL, :username, :apellido, :email, :password, :rol_id)`,
+            [username, apellido, email, password, rol_id],
+            { autoCommit: true }
+        );
+
+        console.log('Usuario creado exitosamente: ', result);
+        res.redirect('/login');
+    } catch (err) {
+        console.log('Error al crear el usuario:', err);
+        res.status(500).send('Error al crear el usuario');
+    }
+});
+
 app.get('/recuperar-password', (req, res) => {
     res.render('recuperar-password');
 });
