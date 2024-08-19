@@ -81,6 +81,7 @@ app.post('/login', async (req, res) => {
         if (result.rows.length > 0){
             //Credenciales correctas, ridirigir a index.ejs
             req.session.isAuthenticated = true;
+            req.session.userId = result.rows[0][0];
             req.session.userEmail = email;
             res.redirect('/');
         } else {
@@ -206,6 +207,47 @@ app.get('/sucursales', (req, res) => {
     res.render('sucursales');
 });
 
+app.post('/guardar-pago', async (req, res) => {
+    const {
+        'metodo-tipo': metodoTipo,
+        'numero-tarjeta': numeroTarjeta,
+        'fecha-expiracion': expiryDate,
+        'cvv': cvv,
+        'estado': estado
+    } = req.body;
+
+    if (!req.session.isAuthenticated) {
+        return res.redirect('/login');
+    }
+
+    const userId = req.session.userId;
+
+    console.log('Datos recibidos:', {
+        metodoTipo,
+        numeroTarjeta,
+        expiryDate,
+        cvv,
+        estado
+    });
+
+    try {
+        const connection = req.db;
+
+        // Inserta los datos en la tabla fide_metodos_pago_tb
+        const result = await connection.execute(
+            `INSERT INTO fide_metodos_pago_tb (metodo_pago_id, usuario_id, metodo_tipo, numero_tarjeta, fecha_expiracion, cvv, estado)
+            VALUES (fide_metodos_pago_seq.NEXTVAL, :userId, :metodoTipo, :numeroTarjeta, TO_DATE(:expiryDate, 'YYYY-MM'), :cvv, :estado)`,
+            [userId, metodoTipo, numeroTarjeta, expiryDate, cvv, estado],
+            { autoCommit: true }
+        );
+
+        console.log('Método de pago guardado exitosamente: ', result);
+        res.redirect('/perfil');
+    } catch (err) {
+        console.log('Error al guardar el método de pago: ', err);
+        res.status(500).send('Error al guardar el método de pago');
+    }
+});
 
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
