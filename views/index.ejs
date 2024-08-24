@@ -69,6 +69,74 @@
             color: #007bff;
         }
 
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            margin-top: 80px;
+        }
+
+        .product-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .product-card h3 {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .product-card p {
+            color: #555;
+        }
+
+        .product-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .product-buttons button {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart {
+            background-color: orange;
+        }
+
+        .add-to-cart:hover {
+            background-color: darkorange;
+        }
+
+        .edit-button {
+            background-color: blue;
+        }
+
+        .edit-button:hover {
+            background-color: darkblue;
+        }
+
         .footer {
             background-color: blue;
             color: white;
@@ -96,6 +164,36 @@
             <% } else { %>
                 <a href="/login" class="login-link">Iniciar Sesion</a>
             <% } %>
+    </div>
+
+    <div class="product-grid">
+        <div class="product-card">
+            <img src="https://via.placeholder.com/200" alt="Producto 1">
+            <h3>Router XYZ</h3>
+            <p>$100.00</p>
+            <div class="product-buttons">
+                <button class="add-to-cart">Ver producto</button>
+                <button class="edit-button">Editar</button>
+            </div>
+        </div>
+        <div class="product-card">
+            <img src="https://via.placeholder.com/200" alt="Producto 2">
+            <h3>Switch ABC</h3>
+            <p>$75.00</p>
+            <div class="product-buttons">
+                <button class="add-to-cart">Ver Producto</button>
+                <button class="edit-button">Editar</button>
+            </div>
+        </div>
+        <div class="product-card">
+            <img src="https://via.placeholder.com/200" alt="Producto 3">
+            <h3>Domótica 123</h3>
+            <p>$150.00</p>
+            <div class="product-buttons">
+                <button class="add-to-cart">Ver Producto</button>
+                <button class="edit-button">Editar</button>
+            </div>
+        </div>
     </div>
 
     <div class="footer">
