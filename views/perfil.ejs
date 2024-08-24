@@ -13,6 +13,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            overflow: auto;
         }
 
         .navbar {
@@ -27,6 +28,7 @@
             justify-content: space-between;
             box-sizing: border-box;
             height: 70px;
+            z-index: 1000;
         }
 
         .navbar img {
@@ -57,44 +59,45 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 400px;
-            margin-top: 100px;
-            margin-left: auto;
-            margin-right: auto;
+            width: 350px;
+            margin: 100px auto 30px auto;
             flex-grow: 1;
-            text-align: center;
         }
 
         .profile-container h2 {
             margin-bottom: 20px;
             font-size: 24px;
             color: #333;
+            text-align: center;
         }
 
-        .profile-container .profile-info {
-            text-align: left;
-            margin-bottom: 15px;
+        .profile-info-group {
+            margin-bottom: 20px;
         }
 
-        .profile-container .profile-info label {
+        .profile-info-group label {
             font-weight: bold;
             color: #333;
+            margin-bottom: 5px;
+            display: block;
         }
 
-        .profile-container .profile-info p {
-            margin: 5px 0 15px 0;
-            padding: 10px;
-            background-color: #f1f1f1;
+        .profile-info-group p {
+            margin: 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
             border-radius: 5px;
-            color: #333;
+            color: #555;
+            word-wrap: break-word;
+            font-size: 14px;
         }
 
-        .profile-container .switch-container {
-            text-align: left;
-            margin-bottom: 15px;
+        .switch-container {
+            margin-bottom: 20px;
         }
 
-        .profile-container .switch-container label {
+        .switch-container label {
             font-weight: bold;
             color: #333;
             margin-right: 10px;
@@ -103,8 +106,8 @@
         .switch {
             position: relative;
             display: inline-block;
-            width: 60px;
-            height: 34px;
+            width: 50px;
+            height: 28px;
         }
 
         .switch input {
@@ -128,8 +131,8 @@
         .slider::before {
             position: absolute;
             content: "";
-            height: 26px;
-            width: 26px;
+            height: 22px;
+            width: 22px;
             left: 4px;
             bottom: 4px;
             background-color: white;
@@ -141,13 +144,12 @@
             background-color: #007bff;
         }
 
-        input:checked + .slider::before {
-            transform: translateX(26px);
+        input:checked + slider::before {
+            transform: translateX(22px);
         }
 
         .payment-link {
             margin-top: 10px;
-            display: block;
             text-align: left;
         }
 
@@ -160,6 +162,29 @@
             text-decoration: underline;
         }
 
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            background-color: #004494;
+            transform: sacle(1);
+        }
+
         .footer {
             background-color: blue;
             color: white;
@@ -168,6 +193,7 @@
             position: fixed;
             bottom: 0;
             width: 100%;
+            z-index: 1000;
         }
     </style>
 </head>
@@ -180,40 +206,43 @@
     </div>
     <div class="profile-container">
         <h2>Perfil de Usuario</h2>
-        <div class="profile-info">
+        <div class="profile-info-group">
             <label>Nombre de Usuario:</label>
-            <p><%= nombre %><p>
+            <p><%= nombre %></p>
         </div>
-        <div class="profile-info">
+        <div class="profile-info-group">
             <label>Email:</label>
             <p><%= email %></p>
         </div>
-        <div class="profile-info">
+        <div class="profile-info-group">
             <label>Contraseña:</label>
             <p><%= contrasena %></p>
         </div>
-        <div class="profile-info">
+        <div class="profile-info-group">
+            <label>Rol: </label>
+            <p><%= rol %></p>
+        </div>
+        <div class="profile-info-group">
             <label>Fecha de Registro:</label>
             <p><%= fechaRegistro %></p>
         </div>
-        <div class="profile-info">
-            <label>Rol:</label>
-            <p><%= rol %></p>
-        </div>
-        <div class="profile-info">
+        <div class="profile-info-group">
             <label>Tarjeta Actual:</label>
             <p><%= tarjeta %></p>
         </div>
         <div class="payment-link">
-            <a href="/metodo-pago">Actualizar Método de Pago</a>
+            <a href="/metodo-pago">Agregar Método de Pago</a>
         </div>
-        <div class="switch-container">
-            <label>Notificaciones:</label>
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider"></span>
-            </label>
-        </div>
+        <form action="/guardar-notificaciones" method="POST">
+            <div class="switch-container">
+                <label>Notificaciones:</label>
+                <label class="switch">
+                    <input type="checkbox" name="Notifcaciones" <%= notificacionesChecked %>>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <button type="submit">Guardar Cambios</button>
+        </form>
     </div>
     <div class="footer">
         © 2024 Sekunet - Todos los derechos reservados

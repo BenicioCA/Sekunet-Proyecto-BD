@@ -158,6 +158,7 @@ app.get('/recuperar-password', (req, res) => {
     res.render('recuperar-password');
 });
 
+// Ruta para mostrar el perfil
 app.get('/perfil', async (req, res) => {
     if (!req.session.isAuthenticated) {
         return res.redirect('/login');
@@ -169,7 +170,7 @@ app.get('/perfil', async (req, res) => {
 
         // Consultar la información del usuario desde la base de datos
         const userResult = await connection.execute(
-            'SELECT usuario_nombre, usuario_email, usuario_contrasena, usuario_fecha_registro, rol_id FROM fide_usuarios_tb WHERE usuario_email = :email',
+            'SELECT usuario_id, usuario_nombre, usuario_email, usuario_contrasena, usuario_fecha_registro, rol_id FROM fide_usuarios_tb WHERE usuario_email = :email',
             [email]
         );
 
@@ -181,33 +182,86 @@ app.get('/perfil', async (req, res) => {
         // Obtener el nombre del rol
         const roleResult = await connection.execute(
             'SELECT rol_nombre FROM fide_roles_tb WHERE rol_id = :rol_id',
-            [user[4]]
+            [user[5]]
         );
 
         const role = roleResult.rows[0][0];
 
         // Consultar el número de tarjeta del usuario
         const cardResult = await connection.execute(
-            'SELECT metodo_tipo, estado, fecha_expiracion FROM fide_metodos_pago_tb WHERE usuario_id = :userId ORDER BY metodo_pago_id DESC FETCH FIRST 1 ROW ONLY',
-            [user[4]] // Usar el ID de usuario obtenido en la consulta previa
+            'SELECT metodo_tipo FROM fide_metodos_pago_tb WHERE usuario_id = :userId ORDER BY metodo_pago_id DESC FETCH FIRST 1 ROW ONLY',
+            [user[0]]
         );
 
-        const card = cardResult.rows[0];
-        const cardInfo = card ? `${card[0]} - ${card[2]} - ${card[1]}` : 'No se encontró información de tarjeta';
+        let cardInfo = 'No se encontró información de tarjeta';
+        if (cardResult.rows.length > 0){
+            const fullCardInfo = cardResult.rows[0][0];
+            const cardNumber = fullCardInfo.match(/\d+/);
+            cardInfo = cardNumber ? cardNumber[0] : 'Número de tarjeta no disponible';
+        }
+
+        // Consultar el estado de notificaciones
+        const notifResult = await connection.execute(
+            'SELECT notificacion_id FROM fide_notificaciones_tb WHERE usuario_id = :userId',
+            [user[0]]
+        );
+
+        const notificacionesChecked = notifResult.rows.length > 0 ? 'checked' : '';
 
         res.render('perfil', {
-            nombre: user[0],
-            email: user[1],
-            contrasena: user[2],
-            fechaRegistro: user[3],
+            nombre: user[1],
+            email: user[2],
+            contrasena: user[3],
+            fechaRegistro: user[4],
             rol: role,
-            tarjeta: cardInfo
+            tarjeta: cardInfo,
+            notificacionesChecked: notificacionesChecked
         });
     } catch (err) {
         console.error('Error al obtener el perfil:', err);
         res.status(500).send('Error al obtener el perfil');
     }
 });
+
+// Ruta para guardar el estado de notificaciones
+app.post('/guardar-notificaciones', async (req, res) => {
+    if (!req.session.isAuthenticated) {
+        return res.redirect('/login');
+    }
+
+    const userId = req.session.userId;
+    const notificaciones = req.body.notificaciones ? true : false;
+
+    try {
+        const connection = req.db;
+
+        if (notificaciones) {
+            // Inserta en la tabla si no existe una entrada
+            await connection.execute(
+                `MERGE INTO fide_notificaciones_tb USING (SELECT :userId AS usuario_id FROM dual) src
+                 ON (fide_notificaciones_tb.usuario_id = src.usuario_id)
+                 WHEN NOT MATCHED THEN
+                 INSERT (notificacion_id, usuario_id, notificacion_tipo, notificacion_contenido)
+                 VALUES (fide_notificaciones_seq.NEXTVAL, :userId, 'General', 'Notificaciones activas')`,
+                [userId],
+                { autoCommit: true }
+            );
+        } else {
+            // Elimina la entrada si existe
+            await connection.execute(
+                `DELETE FROM fide_notificaciones_tb WHERE usuario_id = :userId`,
+                [userId],
+                { autoCommit: true }
+            );
+        }
+
+        res.redirect('/perfil');
+    } catch (err) {
+        console.error('Error al guardar el estado de las notificaciones:', err);
+        res.status(500).send('Error al guardar el estado de las notificaciones');
+    }
+});
+
 
 app.get('/metodo-pago', (req, res) => {
     res.render('metodo-pago');
