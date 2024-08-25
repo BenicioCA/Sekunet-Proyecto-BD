@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Producto</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
+    <style>
+        body {
+            background-color: whitesmoke;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .navbar {
+            background-color: white;
+            padding: 15px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            justify-content: space-between;
+            box-sizing: border-box;
+            height: 70px;
+        }
+
+        .navbar img {
+            height: 100%;
+            max-height: 50px;
+            margin-right: 20px;
+            object-fit: contain;
+        }
+
+        .navbar .nav-container {
+            display: flex;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .navbar .nav-links a {
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 50px;
+        }
+
+        .navbar .nav-links a:hover {
+            color: #007bff;
+        }
+
+        .navbar .login-link {
+            margin-left: 20px;
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 50px;
+        }
+
+        .navbar .login-link:hover {
+            color: #007bff;
+        }
+
+        .footer {
+            background-color: blue;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .container {
+            margin: 80px 20px 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0, 0.1);
+            padding: 20px;
+        }
+
+        .container h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .container label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        .container input, .container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .container button {
+            background-color: orange;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .container button:hover {
+            background-color: darkorange;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <img src="https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/dtbujoqmk9arq03eipw9" alt="Sekunet Logo">
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="/routers">Router</a>
+                <a href="/switches">Switches</a>
+                <a href="/productos-domotica">Productos Domótica</a>
+                <a href="/sucursales">Nuestras Sucursales</a>
+            </div>
+        </div>
+        <% if (isAuthenticated) { %>
+            <a href="/perfil" class="login-link">Perfil</a>
+        <% } else { %>
+            <a href="/login" class="login-link">Iniciar Sesión</a>
+        <% } %>
+    </div>
+
+    <div class="container">
+        <h1>Editar Producto</h1>
+        <form action="/editar-producto" method="POST">
+            <label for="productName">Nombre del Producto</label>
+            <input type="text" id="productName" name="productName" required>
+
+            <label for="productDescription">Descripción del Producto</label>
+            <input type="text" id="productDescription" name="productDescription" required>
+
+            <label for="productPrice">Precio</label>
+            <input type="number" id="productPrice" name="productPrice" step="0.01" required>
+
+            <label for="productCategory">Categoría</label>
+            <select id="productCategory" name="productCategory" required>
+                <option value="routers">Routers</option>
+                <option value="switches">Switches</option>
+                <option value="domotica">Productos Domótica</option>
+            </select>
+
+            <button type="submit">Guardar Cambios</button>
+        </form>
+        <a href="/" class="back-link">Volver a Inicio</a>
+    </div>
+
+    <div class="footer">
+        © 2024 Sekunet - Todos los derechos reservados
+    </div>
+</body>
+</html>

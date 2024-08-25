@@ -275,6 +275,10 @@ app.get('/sucursales', (req, res) => {
     res.render('sucursales');
 });
 
+app.get('/editar-producto', (req, res) => {
+    res.render('editar-producto');
+});
+
 app.post('/guardar-pago', async (req, res) => {
     const {
         'metodo-tipo': metodoTipo,
