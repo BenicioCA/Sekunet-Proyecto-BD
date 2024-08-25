@@ -137,9 +137,29 @@ app.post('/crear-cuenta', async (req, res) => {
     }
 });
 
-app.get('/', (req, res) => {
-    console.log('Updated')
-    res.render('index')
+app.get('/', async (req, res) => {
+    let rol = 'guest'; //Valor predeterminado para los usuarios no autenticados
+
+    if (req.session.isAuthenticated) {
+        try {
+            const connection = req.db;
+            const email = req.session.userEmail;
+
+            // Obtener el rol del usuario
+            const result = await connection.execute(
+                'SELECT r.rol_nombre FROM fide_usuarios_tb u JOIN fide_roles_tb r ON u.rol_id = r.rol_id WHERE u.usuario_email = :email',
+                [email]
+            );
+
+            if (result.rows.length > 0) {
+                rol = result.rows[0][0]; // Asigna el nombre del rol
+            }
+        } catch (err) {
+            console.error('Error al obtener el rol del usuario:', err);
+        }
+    }
+
+    res.render('index', { rol });
 });
 
 app.get('/routers', (req, res) => {
