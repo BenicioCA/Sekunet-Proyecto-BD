@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Productos</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
+    <style>
+        body {
+            background-color: whitesmoke;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .navbar {
+            background-color: white;
+            padding: 15px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            justify-content: space-between;
+            box-sizing: border-box;
+            height: 70px;
+        }
+
+        .navbar img {
+            height: 100%;
+            max-height: 50px;
+            margin-right: 20px;
+            object-fit: contain;
+        }
+
+        .navbar .nav-conatiner {
+            display: flex;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .navbar .nav-links a {
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 50px;
+        }
+
+        .navbar .nav-links a:hover {
+            color: #007bff;
+        }
+
+        .navbar .login-link {
+            margin-left: 20px;
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 50px;
+        }
+
+        .navbar .login-link:hover {
+            color: #007bff;
+        }
+
+        .footer {
+            background-color: blue;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .product-container {
+            margin: 80px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0, 0.1);
+            padding: 20px;
+        }
+
+        .product-image {
+            max-width: 400px;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .product-info {
+            text-align: center;
+        }
+
+        .product-info h1 {
+            margin:0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .product-info p {
+            color: #555;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .product-info .quantity {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .add-to-cart-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <img src="https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/dtbujoqmk9arq03eipw9" alt="Sekunet Logo">
+        <div class="nav-conatiner">
+            <div class="nav-links">
+                <a href="/routers">Router</a>
+                <a href="/switches">Switches</a>
+                <a href="/productos-domotica">Productos Domótica</a>
+                <a href="/sucursales">Nuestras Sucursales</a>
+            </div>
+        </div>
+        <% if (isAuthenticated) { %>
+            <a href="/perfil" class="login-link">Perfil</a>
+        <% } else { %>
+            <a href="/login" class="login-link">Iniciar Sesión</a>
+        <% } %>
+    </div>
+    
+    <div class="product-container">
+        <img src="https://via.placeholder.com/400" alt="Imagen del Producto" class="product-image">
+        <div class="product-info">
+            <h1>Nombre del Producto</h1>
+            <p>Descripción del producto</p>
+            <p class="quantity">Cantidad Disponible: </p>
+            <button class="add-to-cart-button">Agregar a Carrito</button>
+            <a href="/" class="back-link">Volver Atrás</a>
+        </div>
+    </div>
+    <div class="footer">
+        © 2024 Sekunet - Todos los derechos reservados
+    </div>
+</body>
+</html>

@@ -158,6 +158,10 @@ app.get('/recuperar-password', (req, res) => {
     res.render('recuperar-password');
 });
 
+app.get('/ver-producto', (req, res) => {
+    res.render('ver-producto');
+});
+
 // Ruta para mostrar el perfil
 app.get('/perfil', async (req, res) => {
     if (!req.session.isAuthenticated) {

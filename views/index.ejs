@@ -111,21 +111,21 @@
             margin-top: 10px;
         }
 
-        .product-buttons button {
+        .product-buttons a {
             border: none;
             padding: 10px 15px;
             border-radius: 5px;
             font-size: 14px;
             color: white;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
             transition: background-color 0.3s;
-        }
-
-        .add-to-cart {
             background-color: orange;
+            text-align: center;
         }
 
-        .add-to-cart:hover {
+        .product-buttons a:hover {
             background-color: darkorange;
         }
 
@@ -172,7 +172,7 @@
             <h3>Router XYZ</h3>
             <p>$100.00</p>
             <div class="product-buttons">
-                <button class="add-to-cart">Ver producto</button>
+                <a href="/ver-producto?id=1">Ver Producto</a>
                 <button class="edit-button">Editar</button>
             </div>
         </div>
@@ -181,7 +181,7 @@
             <h3>Switch ABC</h3>
             <p>$75.00</p>
             <div class="product-buttons">
-                <button class="add-to-cart">Ver Producto</button>
+                <a href="/ver-producto?id=2">Ver Producto</a>
                 <button class="edit-button">Editar</button>
             </div>
         </div>
@@ -190,7 +190,7 @@
             <h3>Domótica 123</h3>
             <p>$150.00</p>
             <div class="product-buttons">
-                <button class="add-to-cart">Ver Producto</button>
+                <a href="/ver-producto?id=3">Ver Producto</a>
                 <button class="edit-button">Editar</button>
             </div>
         </div>
