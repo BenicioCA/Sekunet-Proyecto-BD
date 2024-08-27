@@ -342,26 +342,33 @@ app.post('/guardar-notificaciones', async (req, res) => {
 });
 
 //Rutas para agregar productos
-app.get('/agregar-producto', async (req, res) => {
+app.get('/agregar-producto', (req, res) => {
+    res.render('agregar-producto');
+});
+
+app.post('/agregar-producto', async (req, res) => {
+    const { nombre, descripcion, precio, categoria, cantidad } = req.body;
+
     try {
         const connection = req.db;
 
-        // Obtener las categorías desde la base de datos
-        const categoriasResult = await connection.execute(
-            'SELECT categoria_id, categoria_nombre FROM fide_categorias_tb'
+        // Insertar los datos en la tabla fide_productos_tb
+        const result = await connection.execute(
+            `INSERT INTO fide_productos_tb (producto_id, producto_nombre, producto_descripcion, producto_precio, categoria_id, producto_cantidad_disponible)
+             VALUES (fide_productos_seq.NEXTVAL, :nombre, :descripcion, :precio, :categoria, :cantidad)`,
+            [nombre, descripcion, precio, categoria, cantidad],
+            { autoCommit: true }
         );
 
-        const categorias = categoriasResult.rows.map(row => ({
-            categoria_id: row[0],
-            categoria_nombre: row[1]
-        }));
-
-        res.render('agregar-producto', { categorias });
+        console.log('Producto agregado exitosamente: ', result);
+        res.redirect('/');  // Redirige a la página de inicio después de agregar el producto
     } catch (err) {
-        console.log('Error al obtener categorías', err);
-        res.status(500).send('Error al obtener categorías');
+        console.log('Error al agregar el producto: ', err);
+        res.status(500).send('Error al agregar el producto');
     }
 });
+
+
 
 //Ruta para guardar el producto
 app.post('/guardar-producto', async (req, res) => {
