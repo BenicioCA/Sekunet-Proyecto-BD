@@ -7,163 +7,165 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
     <style>
         body {
-            background-color: whitesmoke;
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-        }
+    background-color: whitesmoke;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
 
-        .navbar {
-            background-color: white;
-            padding: 15px;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid #ddd;
-            justify-content: space-between;
-            box-sizing: border-box;
-            height: 70px;
-        }
+.navbar {
+    background-color: white;
+    padding: 15px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    justify-content: space-between;
+    box-sizing: border-box;
+    height: 70px;
+}
 
-        .navbar img {
-            height: 100%;
-            max-height: 50px;
-            margin-right: 20px;
-            object-fit: contain;
-        }
+.navbar img {
+    height: 100%;
+    max-height: 50px;
+    margin-right: 20px;
+    object-fit: contain;
+}
 
-        .navbar .nav-container {
-            display: flex;
-            flex: 1;
-            justify-content: center;
-        }
+.navbar .nav-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
 
-        .navbar .nav-links {
-            display: flex;
-            gap: 30px;
-        }
+.navbar .nav-links {
+    display: flex;
+    gap: 30px;
+}
 
-        .navbar .nav-links a {
-            text-decoration: none;
-            color: black;
-            font-size: 18px;
-            font-weight: bold;
-            line-height: 50px;
-        }
+.navbar .nav-links a {
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 50px;
+}
 
-        .navbar .nav-links a:hover {
-            color: #007bff;
-        }
+.navbar .nav-links a:hover {
+    color: #007bff;
+}
 
-        .navbar .login-link {
-            margin-left: 20px;
-            text-decoration: none;
-            color: black;
-            font-size: 18px;
-            font-weight: bold;
-            line-height: 50px;
-        }
+.navbar .login-link {
+    margin-left: 20px;
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 50px;
+}
 
-        .navbar .login-link:hover {
-            color: #007bff;
-        }
+.navbar .login-link:hover {
+    color: #007bff;
+}
 
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            margin-top: 80px;
-        }
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Ajusta la cantidad de columnas */
+    gap: 15px; /* Ajusta el espacio entre cuadros */
+    padding: 20px;
+    margin-top: 80px;
+}
 
-        .product-card {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+.product-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px; /* Ajusta el padding */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 300px; /* Ajusta la altura */
+}
 
-        .product-card img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-        }
+.product-card img {
+    max-width: 100%;
+    max-height: 150px; /* Ajusta la altura máxima de las imágenes */
+    object-fit: cover; /* Evita distorsión */
+    border-radius: 5px;
+}
 
-        .product-card h3 {
-            margin: 10px 0;
-            font-size: 18px;
-            color: #333;
-        }
+.product-card h3 {
+    margin: 10px 0;
+    font-size: 16px; /* Ajusta el tamaño de fuente */
+    color: #333;
+}
 
-        .product-card p {
-            color: #555;
-        }
+.product-card p {
+    color: #555;
+}
 
-        .product-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
+.product-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
 
-        .product-buttons a {
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 14px;
-            color: white;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: background-color 0.3s;
-            background-color: orange;
-            text-align: center;
-        }
+.product-buttons a {
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 12px; /* Ajusta el tamaño de fuente */
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s;
+    background-color: orange;
+    text-align: center;
+}
 
-        .product-buttons a:hover {
-            background-color: darkorange;
-        }
+.product-buttons a:hover {
+    background-color: darkorange;
+}
 
-        .edit-button {
-            background-color: blue;
-        }
+.edit-button {
+    background-color: blue;
+}
 
-        .edit-button:hover {
-            background-color: darkblue;
-        }
+.edit-button:hover {
+    background-color: darkblue;
+}
 
-        .footer {
-            background-color: blue;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
+.footer {
+    background-color: blue;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
 
-        .footer .add-product-button {
-            display: inline-block;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 14px;
-            color: white;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color 0.3s;
-            background-color: orange;
-            text-align: center;
-        }
+.footer .add-product-button {
+    display: inline-block;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    background-color: orange;
+    text-align: center;
+}
 
-        .footer .add-product-button:hover {
-            background-color: darkorange;
-        }
+.footer .add-product-button:hover {
+    background-color: darkorange;
+}
     </style>
 </head>
 <body>
@@ -186,35 +188,57 @@
 
     <div class="product-grid">
         <div class="product-card">
-            <img src="https://via.placeholder.com/200" alt="Producto 1">
-            <h3>Router XYZ</h3>
-            <p>$100.00</p>
+            <img src="https://www.ticotek.com/wp-content/uploads/2022/11/archer-c50-243x243.jpg" alt="Producto 1">
+            <h3>TP Link Archer C50 AC1200 Dual Band</h3>
+            <p>₡16.000</p>
             <div class="product-buttons">
-                <a href="/ver-producto?id=1">Ver Producto</a>
+                <a href="/agregar-carrito?id=1">Agregar a Carrito</a>
                 <% if (rol === 'admin') { %>
                     <a href="/editar-producto?id=1" class="edit-button">Editar Producto</a>
                 <% } %>
             </div>
         </div>
         <div class="product-card">
-            <img src="https://via.placeholder.com/200" alt="Producto 2">
-            <h3>Switch ABC</h3>
-            <p>$75.00</p>
+            <img src="https://www.ticotek.com/wp-content/uploads/2024/06/14-pu.png" alt="Producto 2">
+            <h3>Router Dahua AX15M</h3>
+            <p>₡19.000</p>
             <div class="product-buttons">
-                <a href="/ver-producto?id=2">Ver Producto</a>
+                <a href="/agregar-carrito?id=2">Agregar a Carrito</a>
                 <% if (rol === 'admin') { %>
                     <a href="/editar-producto?id=2" class="edit-button">Editar Producto</a>
                 <% } %>
             </div>
         </div>
         <div class="product-card">
-            <img src="https://via.placeholder.com/200" alt="Producto 3">
-            <h3>Producto producto-domotica ABC</h3>
-            <p>$75.00</p>
+            <img src="https://arastorecr.com/wp-content/uploads/2024/04/1.png" alt="Producto 3">
+            <h3>Mini Camara de Seguridad</h3>
+            <p>₡14.900</p>
             <div class="product-buttons">
-                <a href="/ver-producto?id=3">Ver Producto</a>
+                <a href="/agregar-carrito?id=3">Agregar a Carrito</a>
                 <% if (rol === 'admin') { %>
                     <a href="/editar-producto?id=3" class="edit-button">Editar Producto</a>
+                <% } %>
+            </div>
+        </div>
+        <div class="product-card">
+            <img src="https://arastorecr.com/wp-content/uploads/2022/11/1-9.png" alt="Producto 3">
+            <h3>Cámara de Seguridad Wifi</h3>
+            <p>₡16.900</p>
+            <div class="product-buttons">
+                <a href="/agregar-carrito?id=4">Agregar a Carrito</a>
+                <% if (rol === 'admin') { %>
+                    <a href="/editar-producto?id=4" class="edit-button">Editar Producto</a>
+                <% } %>
+            </div>
+        </div>
+        <div class="product-card">
+            <img src="https://www.intelec.co.cr/image/cache/catalog/catalogo/Redes/TL-SG1005D-800x800w.jpg.webp" alt="Producto 3">
+            <h3>Switch TP-Link 5 Puertos</h3>
+            <p>₡8000</p>
+            <div class="product-buttons">
+                <a href="/agregar-carrito?id=5">Agregar a Carrito</a>
+                <% if (rol === 'admin') { %>
+                    <a href="/editar-producto?id=5" class="edit-button">Editar Producto</a>
                 <% } %>
             </div>
         </div>

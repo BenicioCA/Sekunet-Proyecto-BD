@@ -144,6 +144,7 @@
     <div class="container">
         <h1>Editar Producto</h1>
         <form action="/editar-producto" method="POST">
+            <input type="hidden" name="id" value="<%= producto.id %>">
             <label for="productName">Nombre del Producto</label>
             <input type="text" id="productName" name="productName" required>
 

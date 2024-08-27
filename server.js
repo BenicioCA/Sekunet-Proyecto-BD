@@ -159,12 +159,48 @@ app.get('/productos-domotica', (req, res) => {
     res.render('productos-domotica');
 });
 
+app.get('/agregar-carrito', (req, res) => {
+    res.render('agregar-carrito');
+});
+
 app.get('/recuperar-password', (req, res) => {
     res.render('recuperar-password');
 });
 
-app.get('/ver-producto', (req, res) => {
-    res.render('ver-producto');
+app.get('/ver-producto/:id', async (req, res) => {
+    if (!req.session.isAuthenticated) {
+        return res.redirect('/login');
+    }
+
+    const productoId = req.params.id;
+
+    try {
+        const connection = req.db;
+
+        // Consultar información del producto
+        const result = await connection.execute(
+            'SELECT nombre, descripcion, cantidad, imagen FROM fide_productos_tb WHERE producto_id = :id',
+            [productoId]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).send('Producto no encontrado');
+        }
+
+        const producto = result.rows[0];
+        res.render('ver-producto', {
+            producto: {
+                nombre: producto[0],
+                descripcion: producto[1],
+                cantidad: producto[2],
+                imagen: producto[3]
+            },
+            isAuthenticated: req.session.isAuthenticated
+        });
+    } catch (err) {
+        console.error('Error al obtener el producto:', err);
+        res.status(500).send('Error al obtener el producto');
+    }
 });
 
 // Ruta para mostrar el perfil
@@ -321,8 +357,71 @@ app.get('/sucursales', (req, res) => {
     res.render('sucursales');
 });
 
-app.get('/editar-producto', (req, res) => {
-    res.render('editar-producto');
+app.get('/editar-producto', async (req, res) => {
+    const productoId = req.query.id; // Obtener el ID del producto de los parámetros de consulta
+
+    try {
+        const connection = req.db;
+
+        // Consultar la información del producto desde la base de datos
+        const productResult = await connection.execute(
+            'SELECT producto_id, producto_nombre, producto_descripcion, producto_precio, categoria_id FROM fide_productos_tb WHERE producto_id = :id',
+            [productoId]
+        );
+
+        const producto = productResult.rows[0];
+        if (!producto) {
+            return res.status(404).send('Producto no encontrado');
+        }
+
+        // Obtener las categorías desde la base de datos
+        const categoriasResult = await connection.execute(
+            'SELECT categoria_id, categoria_nombre FROM fide_categorias_tb'
+        );
+
+        const categorias = categoriasResult.rows.map(row => ({
+            categoria_id: row[0],
+            categoria_nombre: row[1]
+        }));
+
+        res.render('editar-producto', {
+            producto: {
+                id: producto[0],
+                nombre: producto[1],
+                descripcion: producto[2],
+                precio: producto[3],
+                categoria: producto[4]
+            },
+            categorias
+        });
+    } catch (err) {
+        console.error('Error al obtener el producto:', err);
+        res.status(500).send('Error al obtener el producto');
+    }
+});
+
+// Ruta para manejar la actualización del producto
+app.post('/editar-producto', async (req, res) => {
+    const { id, nombre, descripcion, precio, categoria } = req.body;
+
+    try {
+        const connection = req.db;
+
+        // Actualizar el producto en la base de datos
+        const result = await connection.execute(
+            `UPDATE fide_productos_tb
+             SET producto_nombre = :nombre, producto_descripcion = :descripcion, producto_precio = :precio, categoria_id = :categoria
+             WHERE producto_id = :id`,
+            [nombre, descripcion, precio, categoria, id],
+            { autoCommit: true }
+        );
+
+        console.log('Producto actualizado exitosamente:', result);
+        res.redirect('/'); // Redirigir a la página de productos o cualquier otra página que consideres
+    } catch (err) {
+        console.error('Error al actualizar el producto:', err);
+        res.status(500).send('Error al actualizar el producto');
+    }
 });
 
 app.post('/guardar-pago', async (req, res) => {

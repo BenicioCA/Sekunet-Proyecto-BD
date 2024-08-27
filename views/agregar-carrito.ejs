@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ver Productos</title>
+    <title>Carrito</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
     <style>
         body {
@@ -33,7 +33,7 @@
             object-fit: contain;
         }
 
-        .navbar .nav-conatiner {
+        .navbar .nav-container {
             display: flex;
             flex: 1;
             justify-content: center;
@@ -69,6 +69,76 @@
             color: #007bff;
         }
 
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Ajusta la cantidad de columnas */
+            gap: 15px; /* Ajusta el espacio entre cuadros */
+            padding: 20px;
+            margin-top: 80px;
+        }
+
+        .product-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px; /* Ajusta el padding */
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 300px; /* Ajusta la altura */
+        }
+
+        .product-card img {
+            max-width: 100%;
+            max-height: 150px; /* Ajusta la altura máxima de las imágenes */
+            object-fit: cover; /* Evita distorsión */
+            border-radius: 5px;
+        }
+
+        .product-card h3 {
+            margin: 10px 0;
+            font-size: 16px; /* Ajusta el tamaño de fuente */
+            color: #333;
+        }
+
+        .product-card p {
+            color: #555;
+        }
+
+        .product-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .product-buttons a {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 12px; /* Ajusta el tamaño de fuente */
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+            background-color: orange;
+            text-align: center;
+        }
+
+        .product-buttons a:hover {
+            background-color: darkorange;
+        }
+
+        .edit-button {
+            background-color: blue;
+        }
+
+        .edit-button:hover {
+            background-color: darkblue;
+        }
+
         .footer {
             background-color: blue;
             color: white;
@@ -78,69 +148,15 @@
             bottom: 0;
             width: 100%;
         }
-
-        .product-container {
-            margin: 80px 20px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0, 0.1);
-            padding: 20px;
-        }
-
-        .product-image {
-            max-width: 400px;
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .product-info {
-            text-align: center;
-        }
-
-        .product-info h1 {
-            margin:0;
-            font-size: 24px;
-            color: #333;
-        }
-
-        .product-info p {
-            color: #555;
-            font-size: 18px;
-            margin: 10px 0;
-        }
-
-        .product-info .quantity {
-            font-size: 18px;
-            margin: 10px 0;
-        }
-
-        .add-to-cart-button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 18px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .add-to-cart-button:hover {
-            background-color: #0056b3;
-        }
     </style>
+
 </head>
 <body>
     <div class="navbar">
         <img src="https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/dtbujoqmk9arq03eipw9" alt="Sekunet Logo">
-        <div class="nav-conatiner">
+        <div class="nav-container">
             <div class="nav-links">
-                <a href="/routers">Router</a>
+                <a href="/routers">Routers</a>
                 <a href="/switches">Switches</a>
                 <a href="/productos-domotica">Productos Domótica</a>
                 <a href="/sucursales">Nuestras Sucursales</a>
@@ -152,19 +168,12 @@
             <a href="/login" class="login-link">Iniciar Sesión</a>
         <% } %>
     </div>
-    
-    <div class="product-container">
-        <img src="https://via.placeholder.com/400" alt="Imagen del Producto" class="product-image">
-        <div class="product-info">
-            <h1>Nombre del Producto</h1>
-            <p>Descripción del producto</p>
-            <p class="quantity">Cantidad Disponible: </p>
-            <button class="add-to-cart-button">Agregar a Carrito</button>
-            <a href="/" class="back-link">Volver Atrás</a>
-        </div>
+
+    <div class="product-grid">
+        
     </div>
+
     <div class="footer">
-        © 2024 Sekunet - Todos los derechos reservados
-    </div>
+        <p>© 2024 Sekunet. Todos los derechos reservados.</p>
 </body>
 </html>
