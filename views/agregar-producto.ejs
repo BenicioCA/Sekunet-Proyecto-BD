@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Producto</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
+    <style>
+         body {
+            background-color: whitesmoke;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .navbar {
+            background-color: white;
+            padding: 15px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            justify-content: space-between;
+            box-sizing: border-box;
+            height: 70px;
+        }
+
+        .navbar img {
+            height: 100%;
+            max-height: 50px;
+            margin-right: 20px;
+            object-fit: contain;
+        }
+
+        .navbar .nav-container {
+            display: flex;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .navbar .nav-links a {
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 50px;
+        }
+
+        .navbar .nav-links a:hover {
+            color: #007bff;
+        }
+
+        .navbar .login-link {
+            margin-left: 20px;
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 50px;
+        }
+
+        .navbar .login-link:hover {
+            color: #007bff;
+        }
+
+        .footer {
+            background-color: blue;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .container {
+            padding: 20px;
+            margin-top: 80px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-group button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+
+        .back-button {
+            padding: 10px 15px;
+            background-color: orange;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .back-button:hover {
+            background-color: darkorange;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <img src="https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/dtbujoqmk9arq03eipw9" alt="Sekunet Logo">
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="/routers">Routers</a>
+                <a href="/switches">Switches</a>
+                <a href="/productos-domotica">Productos Domótica</a>
+                <a href="/sucursales">Nuestras Sucursales</a>
+            </div>
+        </div>
+        <% if (isAuthenticated) { %>
+            <a href="/perfil" class="login-link">Perfil</a>
+        <% } else { %>
+            <a href="/login" class="login-link">Iniciar Sesión</a>
+        <% } %>
+    </div>
+    
+    <div class="container">
+        <h1>Agregar Producto</h1>
+        <form action="/guardar-producto" method="POST">
+            <div class="form-group">
+                <label for="nombre">Nombre del Producto</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="precio">Precio</label>
+                <input type="number" id="precio" name="precio" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="cantidad">Cantidad Disponible</label>
+                <input type="number" id="cantidad" name="cantidad" required>
+            </div>
+            <div class="form-group">
+                <label for="categoria">Categoría</label>
+                <select id="categoria" name="categoria" required>
+                    <option value="1">Producto Domotica</option>
+                    <option value="2">Switch</option>
+                    <option value="3">Router</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit">Agregar Producto</button>
+            </div>
+        </form>
+        <a href="/" class="back-button">Volver Atrás</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2024 Sekunet. Todos los derechos reservados.</p>
+    </div>
+</body>
+</html>

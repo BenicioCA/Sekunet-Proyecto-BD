@@ -3,6 +3,7 @@ const path = require('path');
 const oracledb = require('oracledb');
 const session = require('express-session');
 const crypto = require('crypto');
+const fs = require('fs');
 
 const app = express();
 
@@ -270,6 +271,47 @@ app.post('/guardar-notificaciones', async (req, res) => {
     }
 });
 
+//Rutas para agregar productos
+app.get('/agregar-producto', async (req, res) => {
+    try {
+        const connection = req.db;
+
+        // Obtener las categorías desde la base de datos
+        const categoriasResult = await connection.execute(
+            'SELECT categoria_id, categoria_nombre FROM fide_categorias_tb'
+        );
+
+        const categorias = categoriasResult.rows.map(row => ({
+            categoria_id: row[0],
+            categoria_nombre: row[1]
+        }));
+
+        res.render('agregar-producto', { categorias });
+    } catch (err) {
+        console.log('Error al obtener categorías', err);
+        res.status(500).send('Error al obtener categorías');
+    }
+});
+
+//Ruta para guardar el producto
+app.post('/guardar-producto', async (req, res) => {
+    const { nombre, descripcion, precio, categoria, cantidad } = req.body;
+
+    const nuevosProducto = {
+        nombre,
+        descripcion,
+        precio,
+        categoria,
+        cantidad
+    };
+
+    const productos = leerProductos();
+    productos.push(nuevosProducto);
+    escribirProductos(productos);
+
+    console.log('Producto agregado exitosamente:', nuevosProducto);
+    res.redirect('/');
+});
 
 app.get('/metodo-pago', (req, res) => {
     res.render('metodo-pago');

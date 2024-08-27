@@ -146,6 +146,24 @@
             bottom: 0;
             width: 100%;
         }
+
+        .footer .add-product-button {
+            display: inline-block;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            background-color: orange;
+            text-align: center;
+        }
+
+        .footer .add-product-button:hover {
+            background-color: darkorange;
+        }
     </style>
 </head>
 <body>
@@ -204,6 +222,9 @@
 
     <div class="footer">
         <p>© 2024 Sekunet. Todos los derechos reservados.</p>
+        <% if (rol === 'admin') { %>
+            <a href="/agregar-producto" class="add-product-button">Agregar Producto</a>
+        <% } %>
     </div>
 </body>
 </html>
