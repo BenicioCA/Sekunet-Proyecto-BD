@@ -185,6 +185,16 @@
             transform: sacle(1);
         }
 
+        .logout-button {
+            background-color: #d9534f;
+            border-color: #d43f3a;
+        }
+
+        .logout-button:hover {
+            background-color: #c9302c;
+            border-color: #ac2925;
+        }
+
         .footer {
             background-color: blue;
             color: white;
@@ -230,9 +240,11 @@
             <label>Tarjeta Actual:</label>
             <p><%= tarjeta %></p>
         </div>
+
         <div class="payment-link">
             <a href="/metodo-pago">Agregar Método de Pago</a>
         </div>
+
         <form action="/guardar-notificaciones" method="POST">
             <div class="switch-container">
                 <label>Notificaciones:</label>
@@ -243,6 +255,11 @@
             </div>
             <button type="submit">Guardar Cambios</button>
         </form>
+
+        <form action="/logout" method="POST">
+            <button type="submit" class="logout-button">Cerrar Sesión</button>
+        </form>
+        
     </div>
     <div class="footer">
         © 2024 Sekunet - Todos los derechos reservados

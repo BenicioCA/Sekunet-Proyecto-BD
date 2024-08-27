@@ -2,18 +2,18 @@ const express = require('express');
 const path = require('path');
 const oracledb = require('oracledb');
 const session = require('express-session');
+const crypto = require('crypto');
 
 const app = express();
 
  //Configuracion de la base de datos Oracle
-const dbConfig = {
+ const dbConfig = {
     user: 'sekunet_admin',
     password: '12345',
     connectString: 'localhost:1521/orcl'
 };
 
 //Configuracion de la sesion
-const crypto = require('crypto');
 const secret = crypto.randomBytes(32).toString('hex');
 
 app.use(session({
@@ -31,6 +31,7 @@ async function getConnection() {
         return connection;
     } catch (err) {
         console.error('Error al conectar a Oracle:', err);
+        throw err;
     }
 }
 
@@ -46,52 +47,55 @@ app.use(async (req, res, next) => {
     }
 });
 
+app.use(express.static(path.join(__dirname, 'styles')));
+app.use(express.urlencoded({ extended: true }));
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 //Middleware para manejar el estado de autentificacion
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isAuthenticated || false;
     next();
 });
 
-app.use(express.static(path.join(__dirname, 'styles')));
-app.use(express.urlencoded({ extended: true }));
-
-
-app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, 'views'));
-
-
 //Rutas
+app.get('/', (req, res) => {
+    const rol = req.session.rol;
+    res.render('index', { rol });
+});
+
+//Ruta para manejar el inicio de sesion
 app.get('/login', (req, res) => {
     res.render('login');
 });
 
-//Ruta para manejar el inicio de sesion
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
         const connection = req.db;
 
-        //Verificar si el usuario existe y si las credenciales son correctas
+        // Verificar si el usuario existe y si las credenciales son correctas
         const result = await connection.execute(
             'SELECT * FROM fide_usuarios_tb WHERE usuario_email = :email AND usuario_contrasena = :password',
             [email, password]
         );
 
-        if (result.rows.length > 0){
-            //Credenciales correctas, ridirigir a index.ejs
+        if (result.rows.length > 0) {
+            // Credenciales correctas, redirigir a index.ejs
             req.session.isAuthenticated = true;
             req.session.userId = result.rows[0][0];
             req.session.userEmail = email;
-            res.redirect('/');
+            req.session.rol = 'admin'; // Establecer rol aquí
+            return res.redirect('/'); // Asegúrate de usar return para evitar múltiples respuestas
         } else {
-            //Credenciales incorrectas, redirigir a login.ejs
-            res.redirect('/login');
+            // Credenciales incorrectas, redirigir a login.ejs
+            return res.redirect('/login'); // Asegúrate de usar return para evitar múltiples respuestas
         }
-
     } catch (err) {
         console.log('Error al iniciar sesión:', err);
-        res.status(500).send('Error al iniciar sesion');
+        res.status(500).send('Error al iniciar sesión');
     }
 });
 
@@ -104,21 +108,26 @@ app.get('/logout', (req, res) => {
     });
 });
 
+
+//Ruta para manejar la creacion de una cuenta
 app.get('/crear-cuenta', (req, res) => {
     res.render('crear-cuenta');
 });
 
-//Ruta para manejar la creacion de una cuenta
 app.post('/crear-cuenta', async (req, res) => {
     const { username, apellido, email, password } = req.body;
 
-    try {
+    try{
         const connection = req.db;
 
         //Determina el rol en base al handle del correo
-        let rol_id = 2; //ID para cliente
+        let rol_id;
         if (email.includes('@sekunet')){
             rol_id = 1; //ID para admin
+        } else if (email.includes('@vendedor')){
+            rol_id = 3; //ID para seller
+        } else {
+            rol_id = 2; //ID para cliente
         }
 
         //Inserta los datos en la tabla fide_usuarios_tb
@@ -132,34 +141,9 @@ app.post('/crear-cuenta', async (req, res) => {
         console.log('Usuario creado exitosamente: ', result);
         res.redirect('/login');
     } catch (err) {
-        console.log('Error al crear el usuario:', err);
+        console.log('Error al crear el usuario: ', err);
         res.status(500).send('Error al crear el usuario');
     }
-});
-
-app.get('/', async (req, res) => {
-    let rol = 'guest'; //Valor predeterminado para los usuarios no autenticados
-
-    if (req.session.isAuthenticated) {
-        try {
-            const connection = req.db;
-            const email = req.session.userEmail;
-
-            // Obtener el rol del usuario
-            const result = await connection.execute(
-                'SELECT r.rol_nombre FROM fide_usuarios_tb u JOIN fide_roles_tb r ON u.rol_id = r.rol_id WHERE u.usuario_email = :email',
-                [email]
-            );
-
-            if (result.rows.length > 0) {
-                rol = result.rows[0][0]; // Asigna el nombre del rol
-            }
-        } catch (err) {
-            console.error('Error al obtener el rol del usuario:', err);
-        }
-    }
-
-    res.render('index', { rol });
 });
 
 app.get('/routers', (req, res) => {

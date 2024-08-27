@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sekunet- Distribuidor mayorista</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=sawp">
+    <title>Sekunet - Distribuidor mayorista</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
     <style>
         body {
             background-color: whitesmoke;
             margin: 0;
             font-family: 'Inter', sans-serif;
         }
-    
+
         .navbar {
             background-color: white;
             padding: 15px;
@@ -52,7 +52,7 @@
             line-height: 50px;
         }
 
-        .navbar .nav-links a:hover{
+        .navbar .nav-links a:hover {
             color: #007bff;
         }
 
@@ -151,19 +151,19 @@
 <body>
     <div class="navbar">
         <img src="https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/dtbujoqmk9arq03eipw9" alt="Sekunet Logo">
-            <div class="nav-container">
-                    <div class="nav-links">
-                    <a href="/routers">Routers</a>
-                    <a href="/switches">Switches</a>
-                    <a href="/productos-domotica">Productos Domótica</a>
-                    <a href="/sucursales">Nuestras Sucursales</a>
-                </div>
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="/routers">Routers</a>
+                <a href="/switches">Switches</a>
+                <a href="/productos-domotica">Productos Domótica</a>
+                <a href="/sucursales">Nuestras Sucursales</a>
             </div>
-            <% if (isAuthenticated) { %>
-                <a href="/perfil" class="login-link">Perfil</a>
-            <% } else { %>
-                <a href="/login" class="login-link">Iniciar Sesion</a>
-            <% } %>
+        </div>
+        <% if (isAuthenticated) { %>
+            <a href="/perfil" class="login-link">Perfil</a>
+        <% } else { %>
+            <a href="/login" class="login-link">Iniciar Sesión</a>
+        <% } %>
     </div>
 
     <div class="product-grid">
@@ -191,8 +191,8 @@
         </div>
         <div class="product-card">
             <img src="https://via.placeholder.com/200" alt="Producto 3">
-            <h3>Domótica 123</h3>
-            <p>$150.00</p>
+            <h3>Producto producto-domotica ABC</h3>
+            <p>$75.00</p>
             <div class="product-buttons">
                 <a href="/ver-producto?id=3">Ver Producto</a>
                 <% if (rol === 'admin') { %>
@@ -203,7 +203,7 @@
     </div>
 
     <div class="footer">
-        © 2024 Sekunet - Todos los derechos reservados
+        <p>© 2024 Sekunet. Todos los derechos reservados.</p>
     </div>
 </body>
 </html>
