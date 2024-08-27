@@ -4,7 +4,8 @@ const oracledb = require('oracledb');
 const session = require('express-session');
 const crypto = require('crypto');
 const fs = require('fs');
-
+const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
 const app = express();
 
  //Configuracion de la base de datos Oracle
@@ -59,6 +60,9 @@ app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isAuthenticated || false;
     next();
 });
+
+//Middleware para analizar los datos de los formularios
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //Rutas
 app.get('/', (req, res) => {
@@ -163,8 +167,38 @@ app.get('/agregar-carrito', (req, res) => {
     res.render('agregar-carrito');
 });
 
+// Ruta para manejar la recuperación de contraseña
 app.get('/recuperar-password', (req, res) => {
     res.render('recuperar-password');
+});
+
+app.post('/recuperar-password', async (req, res) => {
+    const { email, 'new-password': newPassword, 'confirm-password': confirmPassword } = req.body;
+
+    if (newPassword !== confirmPassword) {
+        return res.status(400).send('Las contraseñas no coinciden');
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        const connection = await getDbConnection();
+
+        // Actualizar la contraseña del usuario en la base de datos
+        const result = await connection.execute(
+            `UPDATE fide_usuarios_tb SET usuario_contraseña = :hashedPassword WHERE usuario_email = :email`,
+            { hashedPassword, email },
+            { autoCommit: true }
+        );
+
+        if (result.rowsAffected === 0) {
+            return res.status(404).send('Correo electrónico no encontrado');
+        }
+
+        res.redirect('/login');
+    } catch (error) {
+        console.error('Error al actualizar la contraseña:', error);
+        res.status(500).send('Ocurrió un error al actualizar la contraseña');
+    }
 });
 
 app.get('/ver-producto/:id', async (req, res) => {
@@ -220,7 +254,7 @@ app.get('/perfil', async (req, res) => {
         );
 
         const user = userResult.rows[0];
-        if (!user){
+        if (!user) {
             return res.status(404).send('Usuario no encontrado');
         }
 
@@ -239,10 +273,10 @@ app.get('/perfil', async (req, res) => {
         );
 
         let cardInfo = 'No se encontró información de tarjeta';
-        if (cardResult.rows.length > 0){
+        if (cardResult.rows.length > 0) {
             const fullCardInfo = cardResult.rows[0][0];
-            const cardNumber = fullCardInfo.match(/\d+/);
-            cardInfo = cardNumber ? cardNumber[0] : 'Número de tarjeta no disponible';
+            const lastFourDigits = fullCardInfo.slice(-4); // Obtener los últimos 4 dígitos
+            cardInfo = `**** **** **** ${lastFourDigits}`;
         }
 
         // Consultar el estado de notificaciones
@@ -425,45 +459,40 @@ app.post('/editar-producto', async (req, res) => {
 });
 
 app.post('/guardar-pago', async (req, res) => {
-    const {
-        'metodo-tipo': metodoTipo,
-        'numero-tarjeta': numeroTarjeta,
-        'fecha-expiracion': expiryDate,
-        'cvv': cvv,
-        'estado': estado
-    } = req.body;
-
-    if (!req.session.isAuthenticated) {
-        return res.redirect('/login');
-    }
-
+    const { metodo_tipo, numero_tarjeta, fecha_expiracion, cvv } = req.body;
     const userId = req.session.userId;
-
-    console.log('Datos recibidos:', {
-        metodoTipo,
-        numeroTarjeta,
-        expiryDate,
-        cvv,
-        estado
-    });
 
     try {
         const connection = req.db;
 
-        // Inserta los datos en la tabla fide_metodos_pago_tb
+        // Convertir la fecha de expiración al formato esperado por Oracle
+        const formattedFechaExpiracion = new Date(fecha_expiracion + '-01');
+
+        // Guardar el método de pago en la base de datos
         const result = await connection.execute(
-            `INSERT INTO fide_metodos_pago_tb (metodo_pago_id, usuario_id, metodo_tipo, numero_tarjeta, fecha_expiracion, cvv, estado)
-            VALUES (fide_metodos_pago_seq.NEXTVAL, :userId, :metodoTipo, :numeroTarjeta, TO_DATE(:expiryDate, 'YYYY-MM'), :cvv, :estado)`,
-            [userId, metodoTipo, numeroTarjeta, expiryDate, cvv, estado],
+            `INSERT INTO fide_metodos_pago_tb 
+            (metodo_pago_id, usuario_id, metodo_tipo, fecha_creacion, fecha_expiracion, numero_tarjeta, cvv)
+            VALUES (fide_metodos_pago_seq.NEXTVAL, :userId, :metodo_tipo, SYSDATE, TO_DATE(:fecha_expiracion, 'YYYY-MM-DD'), :numero_tarjeta, :cvv)`,
+            [userId, metodo_tipo, formattedFechaExpiracion.toISOString().slice(0, 10), numero_tarjeta, cvv],
             { autoCommit: true }
         );
 
-        console.log('Método de pago guardado exitosamente: ', result);
+        console.log('Método de pago guardado exitosamente:', result);
         res.redirect('/perfil');
     } catch (err) {
-        console.log('Error al guardar el método de pago: ', err);
+        console.error('Error al guardar el método de pago:', err);
         res.status(500).send('Error al guardar el método de pago');
     }
+});
+
+app.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.redirect('/perfil');
+        }
+        res.clearCookie('connect.sid');
+        return res.redirect('/login');
+    });
 });
 
 app.listen(3000, () => {

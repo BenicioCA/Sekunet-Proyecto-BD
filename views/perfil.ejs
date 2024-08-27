@@ -245,17 +245,6 @@
             <a href="/metodo-pago">Agregar Método de Pago</a>
         </div>
 
-        <form action="/guardar-notificaciones" method="POST">
-            <div class="switch-container">
-                <label>Notificaciones:</label>
-                <label class="switch">
-                    <input type="checkbox" name="Notifcaciones" <%= notificacionesChecked %>>
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <button type="submit">Guardar Cambios</button>
-        </form>
-
         <form action="/logout" method="POST">
             <button type="submit" class="logout-button">Cerrar Sesión</button>
         </form>
